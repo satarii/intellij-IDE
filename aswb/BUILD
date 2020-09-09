@@ -128,14 +128,35 @@ test_suite(
 
 intellij_integration_test_suite(
     name = "normal_integration_tests",
-    srcs = glob(
-        ["tests/integrationtests/**/*.java"],
-        exclude = [
-            "tests/integrationtests/com/google/idea/blaze/android/plugin/NdkDependenciesTest.java",
-            "tests/integrationtests/com/google/idea/blaze/android/functional/AswbMergedManifestTest.java",
-            "tests/integrationtests/com/google/idea/blaze/android/AswbGotoDeclarationTest.java",
-        ],
-    ),
+    # Can't use glob because function params can't include select statements.
+    srcs = [
+        "tests/integrationtests/com/google/idea/blaze/android/run/testrecorder/TestRecorderBlazeCommandRunConfigurationTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/run/BlazeAndroidRunConfigurationCommonStateTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/run/AvailableDebuggersTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/run/binary/BlazeAndroidBinaryRunConfigurationStateTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/run/test/smrunner/BlazeAndroidTestEventsHandlerTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/run/test/BlazeAndroidTestRunConfigurationStateTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/targetmapbuilder/NbTargetMapBuilderTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/targetmapbuilder/NbTargetMapUtilsTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/projectsystem/BlazeSampleDataDirectoryProviderTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/cppimpl/debug/BlazeAndroidNativeDebuggingTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/prefetch/AswbPrefetchFileSourceTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/prefetch/CPrefetchFileSourceTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/sync/AndroidSyncTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/sync/model/idea/BlazeImportFixture.java",
+        "tests/integrationtests/com/google/idea/blaze/android/sync/model/idea/PsiBasedClassFileFinderTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/sync/model/idea/BlazeClassJarProviderIntegrationTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/functional/BlazeApkBuildStepMobileInstallIntegrationTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/functional/BlazeModuleSystemExternalDependencyIntegrationTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/functional/BlazeModuleSystemDependentLibrariesIntegrationTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/functional/BlazeInstrumentationTestApkBuildStepIntegrationTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/functional/InstrumentationTestTargetIntegrationTest.java",
+        "tests/integrationtests/com/google/idea/blaze/android/functional/BlazeApkBuildStepNormalBuildIntegrationTest.java",
+    ] + select_for_plugin_api({
+        "android-studio-4.0": [],
+        "android-studio-4.1": ["tests/integrationtests/com/google/idea/blaze/android/run/DebuggerInfoProviderTest.java"],
+        "android-studio-4.2": ["tests/integrationtests/com/google/idea/blaze/android/run/DebuggerInfoProviderTest.java"],
+    }),
     required_plugins = "com.google.idea.bazel.aswb",
     test_package_root = "com.google.idea.blaze.android",
     runtime_deps = [
